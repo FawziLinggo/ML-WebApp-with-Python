@@ -43,6 +43,11 @@ scaler = StandardScaler().fit(X_train)
 train_sc = scaler.transform(X_train)
 test_sc = scaler.transform(X_test)
 
+def grafik_actual_vs_predict(pred):
+    st.subheader("Prediksi Testing [Actual vs Prediction]")
+    hasil = pd.DataFrame(y_test)
+    hasil['Prediksi'] = pd.DataFrame(pred)
+    st.line_chart(hasil)
 def svm():
     button_display()
     svc = SVC()
@@ -54,10 +59,7 @@ def svm():
     svc_clf = SVC()
     scores = cross_validate(svc_clf, train_sc, y_train, cv=kfold, scoring=scoring)
 
-
-    hasil = pd.DataFrame(y_test)
-    hasil['Prediksi'] = pd.DataFrame(svc_pred)
-    st.line_chart(hasil)
+    grafik_actual_vs_predict(svc_pred)
 
     st.write("""
         # Table Predict SVM
@@ -83,8 +85,9 @@ def mlp_classifier():
     mlp_clf = MLPClassifier()
     scores = cross_validate(mlp_clf, train_sc, y_train, cv=kfold, scoring=scoring)
 
+    grafik_actual_vs_predict(mlp_pred)
     st.write("""
-        # Table Predict MLP Classifier
+        # Predict MLP Classifier
      """)
 
     st_wirete_accuracy(np.mean(scores['test_accuracy']), np.mean(scores['test_recall_macro']),
@@ -104,6 +107,7 @@ def random_forest():
     rf_clf = RandomForestClassifier()
     scores = cross_validate(rf_clf, train_sc, y_train, cv=kfold, scoring=scoring)
 
+    grafik_actual_vs_predict(rf_pred)
     st.write("""
         # Table Predict Random Forest
      """)
