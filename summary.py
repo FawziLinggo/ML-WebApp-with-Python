@@ -58,10 +58,9 @@ def svm():
     st.write("""
         # Table Predict SVM
      """)
-    st.write(""" Mean Accuracy: %f """ %np.mean(scores['test_accuracy']))
-    st.write(""" Mean Recall: %f """ %np.mean(scores['test_recall_macro']))
-    st.write(""" Mean Precision: %f  """ %np.mean(scores['test_precision_macro']))
-    st.write(""" Mean F-measure: %f """ %np.mean(scores['test_f1_macro']))
+
+    st_wirete_accuracy(np.mean(scores['test_accuracy']),np.mean(scores['test_recall_macro']),
+                       np.mean(scores['test_precision_macro']),np.mean(scores['test_f1_macro']))
 
     st.subheader("Confusion Matrix SVM")
     confusion_matrix_plot(y_test, svc_pred)
@@ -84,10 +83,8 @@ def mlp_classifier():
         # Table Predict MLP Classifier
      """)
 
-    st.write(""" Mean Accuracy: %f """ %np.mean(scores['test_accuracy']))
-    st.write(""" Mean Recall: %f """ %np.mean(scores['test_recall_macro']))
-    st.write(""" Mean Precision: %f  """ %np.mean(scores['test_precision_macro']))
-    st.write(""" Mean F-measure: %f """ %np.mean(scores['test_f1_macro']))
+    st_wirete_accuracy(np.mean(scores['test_accuracy']), np.mean(scores['test_recall_macro']),
+                       np.mean(scores['test_precision_macro']), np.mean(scores['test_f1_macro']))
 
     st.subheader("Confusion Matrix MLP")
     confusion_matrix_plot(y_test, mlp_pred)
@@ -107,10 +104,8 @@ def random_forest():
         # Table Predict Random Forest
      """)
 
-    st.write(""" Mean Accuracy: %f """ %np.mean(scores['test_accuracy']))
-    st.write(""" Mean Recall: %f """ %np.mean(scores['test_recall_macro']))
-    st.write(""" Mean Precision: %f  """ %np.mean(scores['test_precision_macro']))
-    st.write(""" Mean F-measure: %f """ %np.mean(scores['test_f1_macro']))
+    st_wirete_accuracy(np.mean(scores['test_accuracy']), np.mean(scores['test_recall_macro']),
+                       np.mean(scores['test_precision_macro']), np.mean(scores['test_f1_macro']))
 
     st.subheader("Confusion Matrix Random Forest")
     confusion_matrix_plot(y_test, rf_pred)
@@ -138,10 +133,8 @@ def smote():
         # Predict SVM SMOTE
      """)
 
-    st.write(""" Mean Accuracy: %f """ %np.mean(scores['test_accuracy']))
-    st.write(""" Mean Recall: %f """ %np.mean(scores['test_recall_macro']))
-    st.write(""" Mean Precision: %f  """ %np.mean(scores['test_precision_macro']))
-    st.write(""" Mean F-measure: %f """ %np.mean(scores['test_f1_macro']))
+    st_wirete_accuracy(np.mean(scores['test_accuracy']), np.mean(scores['test_recall_macro']),
+                       np.mean(scores['test_precision_macro']), np.mean(scores['test_f1_macro']))
 
     time_mlp = time()
     mlp = MLPClassifier()
@@ -159,10 +152,8 @@ def smote():
         # Predict MLP Classifier SMOTE
      """)
 
-    st.write(""" Mean Accuracy: %f """ %np.mean(scores['test_accuracy']))
-    st.write(""" Mean Recall: %f """ %np.mean(scores['test_recall_macro']))
-    st.write(""" Mean Precision: %f  """ %np.mean(scores['test_precision_macro']))
-    st.write(""" Mean F-measure: %f """ %np.mean(scores['test_f1_macro']))
+    st_wirete_accuracy(np.mean(scores['test_accuracy']), np.mean(scores['test_recall_macro']),
+                       np.mean(scores['test_precision_macro']), np.mean(scores['test_f1_macro']))
 
     time_rf = time()
     rf = RandomForestClassifier()
@@ -180,10 +171,8 @@ def smote():
         # Table Predict Random Forest
      """)
 
-    st.write(""" Mean Accuracy: %f """ %np.mean(scores['test_accuracy']))
-    st.write(""" Mean Recall: %f """ %np.mean(scores['test_recall_macro']))
-    st.write(""" Mean Precision: %f  """ %np.mean(scores['test_precision_macro']))
-    st.write(""" Mean F-measure: %f """ %np.mean(scores['test_f1_macro']))
+    st_wirete_accuracy(np.mean(scores['test_accuracy']), np.mean(scores['test_recall_macro']),
+                       np.mean(scores['test_precision_macro']), np.mean(scores['test_f1_macro']))
 
     data_time_calculate =pd.DataFrame(
         {'SVM' : [time_svm_calculate],
@@ -191,13 +180,6 @@ def smote():
         'Random Forest' : [time_rf_calculate]}
     )
 
-    # "Time" : [1,2,3],
-    # 'Model': ['SVM', 'MLP', 'Random Forest']
-
-    bar_chart = altair.Chart(data_time_calculate).mark_bar().encode(
-        y='Time (s):Q',
-        x='Model:O',
-    )
     st.bar_chart(data_time_calculate.loc[0],use_container_width=True)
 
 def confusion_matrix_plot(x,y):
