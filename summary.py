@@ -1,7 +1,8 @@
+import altair
 import streamlit as st
 ## Important
 st.set_option('deprecation.showPyplotGlobalUse', False)
-
+from time import time
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -66,7 +67,6 @@ def svm():
 
 
 
-
 def mlp_classifier():
     mlp = MLPClassifier()
     mlp.fit(train_sc, y_train)
@@ -114,10 +114,12 @@ def random_forest():
 
 
 def smote():
+
     oversample = SMOTE()
     X_train_res, y_train_res = oversample.fit_resample(train_sc, y_train)
     st.bar_chart(pd.value_counts(y_train_res))
 
+    time_svm = time()
     svc = SVC()
     svc.fit(X_train_res, y_train_res)
     svc_pred = svc.predict(test_sc)
@@ -126,6 +128,7 @@ def smote():
     scoring = {'accuracy', 'precision_macro', 'f1_macro', 'recall_macro'}
     svc_clf = SVC()
     scores = cross_validate(svc_clf, X_train_res, y_train_res, cv=kfold, scoring=scoring)
+    time_svm_calculate= time()-time_svm
 
     st.write("""
         # Predict SVM SMOTE
@@ -136,6 +139,7 @@ def smote():
     st.write(""" Mean Precision: %f  """ %np.mean(scores['test_precision_macro']))
     st.write(""" Mean F-measure: %f """ %np.mean(scores['test_f1_macro']))
 
+    time_mlp = time()
     mlp = MLPClassifier()
     mlp.fit(X_train_res, y_train_res)
     mlp_pred = mlp.predict(test_sc)
@@ -144,6 +148,8 @@ def smote():
     scoring = {'accuracy', 'precision_macro', 'f1_macro', 'recall_macro'}
     mlp_clf = MLPClassifier()
     scores = cross_validate(mlp_clf, X_train_res, y_train_res, cv=kfold, scoring=scoring)
+    time_mlp_calculate= time()-time_mlp
+
 
     st.write("""
         # Predict MLP Classifier SMOTE
@@ -154,6 +160,7 @@ def smote():
     st.write(""" Mean Precision: %f  """ %np.mean(scores['test_precision_macro']))
     st.write(""" Mean F-measure: %f """ %np.mean(scores['test_f1_macro']))
 
+    time_rf = time()
     rf = RandomForestClassifier()
     rf.fit(X_train_res, y_train_res)
     rf_pred = rf.predict(test_sc)
@@ -162,6 +169,8 @@ def smote():
     scoring = {'accuracy', 'precision_macro', 'f1_macro', 'recall_macro'}
     rf_clf = RandomForestClassifier()
     scores = cross_validate(rf_clf, X_train_res, y_train_res, cv=kfold, scoring=scoring)
+    time_rf_calculate= time()-time_rf
+
 
     st.write("""
         # Table Predict Random Forest
@@ -171,6 +180,22 @@ def smote():
     st.write(""" Mean Recall: %f """ %np.mean(scores['test_recall_macro']))
     st.write(""" Mean Precision: %f  """ %np.mean(scores['test_precision_macro']))
     st.write(""" Mean F-measure: %f """ %np.mean(scores['test_f1_macro']))
+
+    data_time_calculate =pd.DataFrame(
+        {'SVM' : [time_svm_calculate],
+        'MLP' : [time_mlp_calculate],
+        'Random Forest' : [time_rf_calculate]}
+    )
+
+    # "Time" : [1,2,3],
+    # 'Model': ['SVM', 'MLP', 'Random Forest']
+
+    bar_chart = altair.Chart(data_time_calculate).mark_bar().encode(
+        y='Time (s):Q',
+        x='Model:O',
+    )
+    st.bar_chart(data_time_calculate.loc[0])
+    print(data_time_calculate)
 
 def confusion_matrix_plot(x,y):
     conf_mat = confusion_matrix(x, y)
@@ -197,7 +222,6 @@ if __name__ == '__main__':
         # DataFrame Test
     """)
     st.line_chart(pd.DataFrame(X_test))
-
 
 
     st.write("""Data Describe""")
