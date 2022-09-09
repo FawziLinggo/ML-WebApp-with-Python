@@ -12,6 +12,7 @@ from sklearn.model_selection import train_test_split, ShuffleSplit, cross_valida
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import  confusion_matrix, ConfusionMatrixDisplay
 from collections import Counter
+import webbrowser
 
 # Model
 from sklearn.svm import SVC
@@ -39,6 +40,7 @@ train_sc = scaler.transform(X_train)
 test_sc = scaler.transform(X_test)
 
 def svm():
+    button_display()
     svc = SVC()
     svc.fit(train_sc, y_train)
     svc_pred = svc.predict(test_sc)
@@ -49,9 +51,9 @@ def svm():
     scores = cross_validate(svc_clf, train_sc, y_train, cv=kfold, scoring=scoring)
 
 
-    hasil = pd.DataFrame(y_test, columns=['Aktual'])
-    # hasil['Prediksi'] = pd.DataFrame(pr)
-    #
+    hasil = pd.DataFrame(y_test)
+    hasil['Prediksi'] = pd.DataFrame(svc_pred)
+    st.line_chart(hasil)
 
     st.write("""
         # Table Predict SVM
@@ -68,6 +70,7 @@ def svm():
 
 
 def mlp_classifier():
+    button_display()
     mlp = MLPClassifier()
     mlp.fit(train_sc, y_train)
     mlp_pred = mlp.predict(test_sc)
@@ -90,6 +93,7 @@ def mlp_classifier():
     confusion_matrix_plot(y_test, mlp_pred)
 
 def random_forest():
+    button_display()
     rf = RandomForestClassifier()
     rf.fit(train_sc, y_train)
     rf_pred = rf.predict(test_sc)
@@ -114,7 +118,7 @@ def random_forest():
 
 
 def smote():
-
+    button_display()
     oversample = SMOTE()
     X_train_res, y_train_res = oversample.fit_resample(train_sc, y_train)
     st.bar_chart(pd.value_counts(y_train_res))
@@ -194,8 +198,7 @@ def smote():
         y='Time (s):Q',
         x='Model:O',
     )
-    st.bar_chart(data_time_calculate.loc[0])
-    print(data_time_calculate)
+    st.bar_chart(data_time_calculate.loc[0],use_container_width=True)
 
 def confusion_matrix_plot(x,y):
     conf_mat = confusion_matrix(x, y)
@@ -203,10 +206,40 @@ def confusion_matrix_plot(x,y):
     st.pyplot()
     return x,y
 
+def button_display():
+    url = 'http://localhost:8503/'
+    col1, col2, col3, col4, col5 = st.columns(5)
+
+    with col1:
+        button1 = st.button('Home')
+    with col2:
+        button2 = st.button('Random Forest')
+    with col3:
+        button3 = st.button('MLP Classifier')
+    with col4:
+        button4 = st.button('SVM')
+    with col5:
+        button5 = st.button('Smote')
+
+    if button1:
+        webbrowser.open(url)
+    if button2:
+        webbrowser.open(url + 'model_randomForest')
+    if button3:
+        webbrowser.open(url + 'model_mlp')
+    if button4:
+        webbrowser.open(url + 'model_svm')
+    if button5:
+        webbrowser.open(url + 'smote')
+
 if __name__ == '__main__':
 
-    st.markdown("# Summary page 🎈")
-    st.sidebar.markdown("# Main page 🎈")
+    st.markdown("# Penentuan Klasifikasi UKT Berbasis "
+                "*Machine Learning*")
+    button_display()
+
+    st.write("""Data Describe""")
+    st.write(data.describe())
 
     st.bar_chart(pd.value_counts(data['UKT (Minimum) label']))
 
@@ -216,13 +249,13 @@ if __name__ == '__main__':
     st.write("""
         # DataFrame Train
     """)
-    st.line_chart(pd.DataFrame(X_train))
+    # st.line_chart(pd.DataFrame(X_train))
+    st.bar_chart(pd.DataFrame(X_train))
 
     st.write("""
         # DataFrame Test
     """)
-    st.line_chart(pd.DataFrame(X_test))
+    # st.line_chart(pd.DataFrame(X_test))
+    st.bar_chart(pd.DataFrame(X_test))
 
 
-    st.write("""Data Describe""")
-    st.write(data.describe())
