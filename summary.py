@@ -1,13 +1,7 @@
-import altair
 import streamlit as st
-## Important
-st.set_option('deprecation.showPyplotGlobalUse', False)
-from time import time
-import warnings
-warnings.filterwarnings("ignore")
-
 import pandas  as pd
 import numpy as np
+from PIL import Image
 from sklearn.model_selection import train_test_split, ShuffleSplit, cross_validate
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import  confusion_matrix, ConfusionMatrixDisplay
@@ -20,8 +14,17 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import RandomForestClassifier
 
 from imblearn.over_sampling import SMOTE
+## Important
+from time import time
+import warnings
+
+st.set_option('deprecation.showPyplotGlobalUse', False)
+warnings.filterwarnings("ignore")
+
+
 
 data = pd.read_csv('/home/adi/PycharmProjects/streamlit-testing/data/inidataset-1.csv')
+path_logo='/home/adi/PycharmProjects/streamlit-testing/data/poltek-removebg-preview.png'
 
 ## UKT Minimum label
 data = data[data["UKT (Minimum) label"] != 0]
@@ -34,6 +37,7 @@ scaler2 = StandardScaler()
 X = scaler2.fit_transform(X)
 
 counter = Counter(y_train)
+
 # compute required values
 scaler = StandardScaler().fit(X_train)
 train_sc = scaler.transform(X_train)
@@ -189,10 +193,10 @@ def confusion_matrix_plot(x,y):
     return x,y
 
 def st_wirete_accuracy(a,b,c,d):
-    st.write(""" Mean Accuracy: %f """ %a)
-    st.write(""" Mean Recall: %f """ %b)
-    st.write(""" Mean Precision: %f  """ %c)
-    st.write(""" Mean F-measure: %f """ %d)
+    st.write(""" #Mean Accuracy: *%f* """ %a)
+    st.write(""" #Mean Recall: *%f* """ %b)
+    st.write(""" #Mean Precision: *%f*  """ %c)
+    st.write(""" #Mean F-measure: *%f* """ %d)
 
 def button_display():
     url = 'http://localhost:8503/'
@@ -220,8 +224,19 @@ def button_display():
     if button5:
         webbrowser.open(url + 'smote')
 
-if __name__ == '__main__':
+def logo_():
+    col1, col2, col3 = st.columns(3)
 
+    with col1:
+        st.write(' ')
+
+    with col2:
+        st.image(path_logo)
+
+    with col3:
+        st.write(' ')
+if __name__ == '__main__':
+    logo_()
     st.markdown("# Penentuan Klasifikasi UKT Berbasis "
                 "*Machine Learning*")
     button_display()
