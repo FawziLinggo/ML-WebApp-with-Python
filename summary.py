@@ -206,6 +206,12 @@ def confusion_matrix_plot(x,y):
     st.pyplot()
     return x,y
 
+def st_wirete_accuracy(a,b,c,d):
+    st.write(""" Mean Accuracy: %f """ %a)
+    st.write(""" Mean Recall: %f """ %b)
+    st.write(""" Mean Precision: %f  """ %c)
+    st.write(""" Mean F-measure: %f """ %d)
+
 def button_display():
     url = 'http://localhost:8503/'
     col1, col2, col3, col4, col5 = st.columns(5)
