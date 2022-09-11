@@ -21,9 +21,8 @@ import warnings
 st.set_option('deprecation.showPyplotGlobalUse', False)
 warnings.filterwarnings("ignore")
 
-
-# path to fetch data
-data = pd.read_csv('/home/adi/PycharmProjects/streamlit-testing/data/inidataset-1.csv')
+# path to fetch data (Linux)
+data = pd.read_csv('data/inidataset-1.csv')
 path_logo='/home/adi/PycharmProjects/streamlit-testing/data/poltek-removebg-preview.png'
 
 # UKT Minimum labels
@@ -112,10 +111,10 @@ def st_write_accuracy(a,b,c,d):
     #     https://docs.streamlit.io/library/api-reference/write-magic/st.write
     # ---------------------------------------------------------------------------------
 
-    st.write(""" # Mean Accuracy: *%f* """ %a)
-    st.write(""" # Mean Recall: *%f* """ %b)
-    st.write(""" # Mean Precision: *%f*  """ %c)
-    st.write(""" # Mean F-measure: *%f* """ %d)
+    st.write(""" ## Mean Accuracy: *%f* """ %a)
+    st.write(""" ## Mean Recall: *%f* """ %b)
+    st.write(""" ## Mean Precision: *%f*  """ %c)
+    st.write(""" ## Mean F-measure: *%f* """ %d)
 
 def button_display():
 
@@ -126,6 +125,10 @@ def button_display():
     #
     #     where the column() function will divide the section into what we want
     #     where we only make 5 buttons in 1 row means it takes 5 columns.
+    #
+    #           +----+----+----+----+----+
+    #           |col1|col2|col3|col4|col5|
+    #           +----+----+----+----+----+
     #
     #     see the documentation here:
     #     https://docs.streamlit.io/library/api-reference/layout/st.columns
@@ -381,7 +384,7 @@ if __name__ == '__main__':
     st.write("""
         # DataFrame Test
     """)
-    # st.line_chart(pd.DataFrame(X_test))
+
     st.bar_chart(pd.DataFrame(X_test))
 
 
