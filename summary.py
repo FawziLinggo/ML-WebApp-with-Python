@@ -23,7 +23,7 @@ warnings.filterwarnings("ignore")
 
 # path to fetch data (Linux)
 data = pd.read_csv('data/inidataset-1.csv')
-path_logo='/home/adi/PycharmProjects/streamlit-testing/data/poltek-removebg-preview.png'
+path_logo='data/poltek-removebg-preview.png'
 
 # UKT Minimum labels
 data = data[data["UKT (Minimum) label"] != 0]
