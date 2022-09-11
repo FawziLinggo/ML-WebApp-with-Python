@@ -144,7 +144,7 @@ def button_display():
     #     https://discuss.streamlit.io/t/how-to-link-a-button-to-a-webpage/1661
     # ---------------------------------------------------------------------------------
 
-    url = 'http://localhost:8501/'
+    url = 'https://fawzilinggo-ml-webapp-with-python-summary-bt95zb.streamlitapp.com/'
     col1, col2, col3, col4, col5 = st.columns(5)
 
     with col1:
